@@ -12,6 +12,18 @@ namespace Markdig.Extensions.NoRefLinks
     /// </summary>
     public class NoFollowLinksExtension : IMarkdownExtension
     {
+        public NoFollowLinksExtension() : this(new LinkRelsOptions())
+        {
+        }
+
+        public NoFollowLinksExtension(LinkRelsOptions options)
+        {
+            Options = options ?? new LinkRelsOptions();
+        }
+
+        public LinkRelsOptions Options { get; }
+
+
         public void Setup(MarkdownPipelineBuilder pipeline)
         {
         }
@@ -21,13 +33,17 @@ namespace Markdig.Extensions.NoRefLinks
             var linkRenderer = renderer.ObjectRenderers.Find<LinkInlineRenderer>();
             if (linkRenderer != null)
             {
-                linkRenderer.AutoRelNoFollow = true;
+                linkRenderer.AutoRelNoFollow = Options.AutoRelNoFollow;
+                linkRenderer.AutoRelNoOpener = Options.AutoRelNoOpener;
+                linkRenderer.AutoRelNoReferrer = Options.AutoRelNoReferrer;
             }
 
             var autolinkRenderer = renderer.ObjectRenderers.Find<AutolinkInlineRenderer>();
             if (autolinkRenderer != null)
             {
-                autolinkRenderer.AutoRelNoFollow = true;
+                autolinkRenderer.AutoRelNoFollow = Options.AutoRelNoFollow;
+                autolinkRenderer.AutoRelNoOpener = Options.AutoRelNoOpener;
+                autolinkRenderer.AutoRelNoReferrer = Options.AutoRelNoReferrer;
             }
         }
     }

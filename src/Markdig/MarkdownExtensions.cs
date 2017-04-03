@@ -420,9 +420,9 @@ namespace Markdig
         /// </summary>
         /// <param name="pipeline"></param>
         /// <returns></returns>
-        public static MarkdownPipelineBuilder UseNoFollowLinks(this MarkdownPipelineBuilder pipeline)
+        public static MarkdownPipelineBuilder UseNoFollowLinks(this MarkdownPipelineBuilder pipeline, LinkRelsOptions options = null)
         {
-            pipeline.Extensions.AddIfNotAlready<NoFollowLinksExtension>();
+            pipeline.Extensions.AddIfNotAlready(new NoFollowLinksExtension(options));
             return pipeline;
         }
 

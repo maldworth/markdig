@@ -15,6 +15,8 @@ namespace Markdig.Renderers.Html.Inlines
         /// Gets or sets a value indicating whether to always add rel="nofollow" for links or not.
         /// </summary>
         public bool AutoRelNoFollow { get; set; }
+        public bool AutoRelNoOpener { get; set; }
+        public bool AutoRelNoReferrer { get; set; }
 
         protected override void Write(HtmlRenderer renderer, LinkInline link)
         {
@@ -59,9 +61,23 @@ namespace Markdig.Renderers.Html.Inlines
             {
                 if (renderer.EnableHtmlForInline)
                 {
-                    if (AutoRelNoFollow)
+                    if (AutoRelNoFollow || AutoRelNoOpener || AutoRelNoReferrer)
                     {
-                        renderer.Write(" rel=\"nofollow\"");
+                        renderer.Write(" rel=\"");
+
+                        var relString = string.Empty;
+
+                        if (AutoRelNoFollow)
+                            relString += "nofollow ";
+
+                        if (AutoRelNoOpener)
+                            relString += "noopener ";
+
+                        if (AutoRelNoReferrer)
+                            relString += "noreferrer ";
+
+                        renderer.Write(relString.Trim());
+                        renderer.Write("\"");
                     }
                     renderer.Write(">");
                 }
